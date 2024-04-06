@@ -10,7 +10,7 @@ import {
 } from '@expo-google-fonts/roboto'
 
 import { Loading } from '@/components/Loading'
-import AuthContextProvider from '@/authContext/AuthContext'
+import AuthContextProvider from '@/contexts/AuthContext'
 
 export default function Layout() {
   const [ isFontLoad ] = useFonts({

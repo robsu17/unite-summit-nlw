@@ -8,14 +8,23 @@ import { Feather } from "@expo/vector-icons"
 import { colors } from "@/styles/colors"
 
 import { Qrcode } from "@/components/Qrcode"
+import { BadgeStore, useBadgeStore } from "@/store/badge-store";
 
 type Props = {
-  image?: string;
   onChangeAvatar?: () => void;
   onExpandQRcode?: () => void;
+  data: BadgeStore;
 }
 
-export function Credential({ image, onChangeAvatar, onExpandQRcode }: Props) {
+export function Credential({ 
+  onChangeAvatar, 
+  onExpandQRcode, 
+  data }: Props) 
+{
+
+  const badgeStore = useBadgeStore()
+
+  console.log(badgeStore.data?.checkInURL)
 
   return (
     <View className="w-full self-stretch items-center">
@@ -31,10 +40,10 @@ export function Credential({ image, onChangeAvatar, onExpandQRcode }: Props) {
         >
           <View className="w-full flex-row items-center justify-between">
             <Text className="text-zinc-50 text-sm font-bold">
-              Unite summit
+              {data.eventTitle}
             </Text>
             <Text className="text-zinc-50 text-sm font-bold">
-              123
+              {data.id}
             </Text>
           </View>
 
@@ -42,20 +51,20 @@ export function Credential({ image, onChangeAvatar, onExpandQRcode }: Props) {
         </ImageBackground>
 
         {
-          image ? (
+          data.image ? (
             <TouchableOpacity 
               activeOpacity={0.7}
               onPress={onChangeAvatar}  
             >
               <Image 
-                source={{ uri: image }} 
-                className="w-36 h-36 rounded-full -mt-24"
+                source={{ uri: data.image }} 
+                className="w-36 h-36 rounded-full -mt-[88]"
               />
             </TouchableOpacity>
           ) : (
             <TouchableOpacity
               activeOpacity={0.7}
-              className="w-36 h-36 rounded-full -mt-24 bg-gray-400 items-center justify-center"
+              className="w-36 h-36 rounded-full -mt-[88] bg-gray-400 items-center justify-center"
               onPress={onChangeAvatar}
             >
               <Feather 
@@ -67,11 +76,11 @@ export function Credential({ image, onChangeAvatar, onExpandQRcode }: Props) {
           )
         }
 
-        <Text className="font-bold text-2xl text-zinc-50 mt-4">Robson Wendel</Text>
-        <Text className="font-regular text-base text-zinc-300 mb-4">robson@gmail.com</Text>
+        <Text className="font-bold text-2xl text-zinc-50 mt-4">{data.name}</Text>
+        <Text className="font-regular text-base text-zinc-300 mb-4">{data.email}</Text>
 
         <Qrcode 
-          value="teste"
+          value={badgeStore.data?.checkInURL ?? "Não autoziado"}
           size={120}
         />
 

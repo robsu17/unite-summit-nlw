@@ -8,13 +8,16 @@ import { colors } from '@/styles/colors'
 import { Button } from '@/components/Button'
 import { Link, router } from 'expo-router'
 import { useContext, useState } from 'react'
-import { AuthContext } from '@/authContext/AuthContext'
+import { AuthContext } from '@/contexts/AuthContext'
+import { useBadgeStore  } from "@/store/badge-store"
 
 export default function Register() {
   const [name, setName] = useState("")
   const [email, setEmail] = useState("")
 
   const { register, isLoading } = useContext(AuthContext)
+
+  const badgeStore = useBadgeStore()
 
   async function handleRegsiter() {
     if (!name.trim() || !email.trim()) {

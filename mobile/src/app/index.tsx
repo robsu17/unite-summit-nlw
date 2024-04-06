@@ -6,17 +6,27 @@ import logo from '@/assets/logo.png'
 import { Input } from '@/components/Inputs'
 import { colors } from '@/styles/colors'
 import { Button } from '@/components/Button'
-import { Link } from 'expo-router'
-import { useState } from 'react'
+import { Link, Redirect } from 'expo-router'
+import { useContext, useState } from 'react'
+import { AuthContext } from '@/contexts/AuthContext'
+import { useBadgeStore } from '@/store/badge-store'
 
 export default function Home() {
-
   const [code ,setCode] = useState("")
+  const { login, isLoading } = useContext(AuthContext)
 
-  function handleAccessCredential() {
+  const badgeStore = useBadgeStore()
+
+  async function handleAccessCredential() {
     if (!code.trim()) {
       return Alert.alert("Ingresso", "Informe o código do ingresso!")
     }
+
+    await login(code)
+  }
+
+  if (badgeStore.data?.checkInURL) {
+    return <Redirect href="/ticket" />
   }
 
   return (
@@ -28,6 +38,7 @@ export default function Home() {
         className='h-16' 
         resizeMode='contain'
       />
+
       <View className="w-full mt-12 gap-3">
         <Input>
           <MaterialCommunityIcons 
@@ -44,6 +55,7 @@ export default function Home() {
         <Button 
           title="Acessar gredencial"
           onPress={handleAccessCredential}
+          isLoading={isLoading}
         />
 
         <Link 
